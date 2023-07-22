@@ -355,6 +355,10 @@ public class TaskService {
             log.error(StrUtil.format("发送请求[{}]->发现cloudflare反爬虫验证, 正在进入重试:[We are checking your browser...]", url));
             throw new IllegalStateException("We are checking your browser...");
         }
+        if(StrUtil.contains(response.bodyAsString(), "Just a moment...")) {
+            log.error("验证为真人");
+            throw new IllegalStateException("验证为真人");
+        }
         domain = StrUtil.subBetween(url, "//", "/");
         return Uni.createFrom()
                 .item(response);
